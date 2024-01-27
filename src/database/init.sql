@@ -74,4 +74,4 @@ CREATE TABLE
 INSERT INTO
     "topic" (topic_title)
 VALUES
-    ("Default Topic");
+    ('Default Topic');
