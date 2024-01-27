@@ -1,4 +1,4 @@
-const dontenv = require(dontenv).config();
+const dontenv = require('dotenv').config();
 const Pool = require('pg').Pool;
 const pool = new Pool({
     user: 'postgres',
