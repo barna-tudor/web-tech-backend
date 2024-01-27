@@ -16,7 +16,7 @@ CREATE TABLE
         username TEXT UNIQUE NOT NULL,
         display_name TEXT UNIQUE NOT NULL,
         email TEXT UNIQUE NOT NULL,
-        PASSWORD TEXT NOT NULL,
+        "password" TEXT NOT NULL,
         join_date DATE DEFAULT CURRENT_DATE
     );
 
@@ -75,3 +75,19 @@ INSERT INTO
     "topic" (topic_title)
 VALUES
     ('Default Topic');
+
+INSERT INTO
+    "user" (username, display_name, email, "password")
+VALUES
+    (
+        'default1',
+        'some Display Name',
+        'example1@example.com',
+        'pretend this is hashed'
+    ),
+    (
+        'default2',
+        'some Display name too',
+        'example2@example.com',
+        'totally-hashed-and-salted'
+    );
