@@ -13,6 +13,7 @@ const {
     getCommentsByThreadIDQuery,
     getThreadByIDQuery,
     getThreadsByTopicQuery,
+    getCommentByIdQuery,
 } = require('../database/queries/threads');
 
 // template for endpoints
@@ -227,6 +228,28 @@ const addVoteToComment = expressAsyncHandler(async (req, res) => {
         })
     }
 })
+
+const getCommentById = expressAsyncHandler(async (req, res) => {
+    const { comment_id } = req.params;
+    try {
+        const comment = (await poolQuery(getCommentByIdQuery, [comment_id])).rows[0]
+        return res.status(200).json({
+            status: 200,
+            success: true,
+            result: { ...comment, },
+        });
+    } catch (e) {
+        return res.status(500).json({
+            status: 500,
+            succes: false,
+            error: {
+                name: error.name,
+                message: error.message,
+            }
+        })
+    }
+})
+
 module.exports = {
     createNewThread,
     createNewComment,
@@ -236,4 +259,5 @@ module.exports = {
     addVoteToThread,
     addVoteToComment,
     getAllThreadsByTopic,
+    getCommentById,
 }

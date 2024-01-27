@@ -62,6 +62,13 @@ const getThreadsByTopicQuery =
     GROUP BY t.thread_id
     WHERE topic_id = $1`;
 
+const getCommentByIdQuery =
+    `SELECT c.*, SUM(cv.vote) as vote_total
+    FROM "comment" c
+    LEFT JOIN comment_vote cv ON c.comment_id = cv.comment_id
+    GROUP BY c.comment_id
+    WHERE comment_id = $1`;
+
 module.exports = {
     insertNewThreadQuery,
     insertNewCommentQuery,
@@ -74,4 +81,5 @@ module.exports = {
     getThreadByIDQuery,
     insertNewReplyQuery,
     getThreadsByTopicQuery,
+    getCommentByIdQuery
 }
