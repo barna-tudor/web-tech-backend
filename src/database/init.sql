@@ -34,6 +34,7 @@ CREATE TABLE
         created_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         user_id INT,
         topic_id INT,
+        is_deleted BOOLEAN DEFAULT FALSE,
         CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES "user" (user_id),
         CONSTRAINT fk_topic FOREIGN KEY (topic_id) REFERENCES topic (topic_id)
     );
@@ -47,10 +48,9 @@ CREATE TABLE
         thread_id INT NOT NULL,
         is_reply BOOLEAN DEFAULT FALSE,
         reply_comment_id INT DEFAULT 0,
+        is_deleted BOOLEAN DEFAULT FALSE,
         CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES "user" (user_id),
-        CONSTRAINT fk_thread FOREIGN KEY (thread_id) REFERENCES thread (thread_id),
-        CONSTRAINT fk_comment FOREIGN KEY (comment_id) REFERENCES "comment" (comment_id),
-        CONSTRAINT fk_reply_comment FOREIGN KEY (reply_comment_id) REFERENCES "comment" (comment_id)
+        CONSTRAINT fk_thread FOREIGN KEY (thread_id) REFERENCES thread (thread_id)
     );
 
 CREATE TABLE
