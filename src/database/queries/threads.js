@@ -34,40 +34,40 @@ const getThreadByIDQuery =
     `SELECT t.*, SUM(tv.vote) as vote_total
     FROM thread t
     LEFT JOIN thread_vote tv ON t.thread_id = tv.thread_id
-    GROUP BY t.thread_id
-    WHERE thread_id = $1`;
+    WHERE t.thread_id = $1
+    GROUP BY t.thread_id`;
 
 // No pagination for now
 const getCommentsByThreadIDQuery =
     `SELECT c.*, SUM(cv.vote) as vote_total
     FROM "comment" c
     LEFT JOIN comment_vote cv ON c.comment_id = cv.comment_id
+    WHERE c.thread_id = $1
     GROUP BY c.comment_id
-    WHERE thread_id = $1
-    ORDER BY comment_id`
+    ORDER BY c.comment_id`
 
 // unused
 const getRepliesInThreadQuery =
     `SELECT c.*, SUM(cv.vote) as vote_total
     FROM "comment" c
     LEFT JOIN comment_vote cv ON c.comment_id = cv.comment_id
-    GROUP BY c.comment_id
     WHERE thread_id = $1 AND is_reply = TRUE
-    ORDER BY comment_id`;
+    GROUP BY c.comment_id
+    ORDER BY c.comment_id`;
 
 const getThreadsByTopicQuery =
     `SELECT thread_id, thread_title, thread_body, created_time, SUM(tv.vote) as vote_total
     FROM threads t
     LEFT JOIN thread_vote tv ON t.thread_id = tv.thread_id
-    GROUP BY t.thread_id
-    WHERE topic_id = $1`;
+    WHERE topic_id = $1
+    GROUP BY t.thread_id`;
 
 const getCommentByIdQuery =
     `SELECT c.*, SUM(cv.vote) as vote_total
     FROM "comment" c
     LEFT JOIN comment_vote cv ON c.comment_id = cv.comment_id
-    GROUP BY c.comment_id
-    WHERE comment_id = $1`;
+    WHERE c.comment_id = $1
+    GROUP BY c.comment_id`;
 
 module.exports = {
     insertNewThreadQuery,
