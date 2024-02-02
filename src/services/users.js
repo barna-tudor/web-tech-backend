@@ -150,6 +150,7 @@ const getUserByDisplayName = expressAsyncHandler(async (req, res) => {
         const comments = poolQuery(getCommentsByDisplayNameQuery, [displayName])
         promiseArr.push(user, posts, comments);
         const [userResult, postsResult, commentsResult] = await Promise.all(promiseArr);
+        if (userResult.rows.length === 0) { throw new CustomError("User not found!", "USER NOT FOUND", 404) }
         return res.status(200).json({
             status: 200,
             success: true,
@@ -183,12 +184,89 @@ const getUserByDisplayName = expressAsyncHandler(async (req, res) => {
     }
 });
 
+const getUserPosts = expressAsyncHandler(async (req, res) => {
+    const { displayName } = req.params;
+    try {
+        const user = (await poolQuery(getUserByDisplayNameQuery, [displayName])).rows;
+        const results = (await poolQuery(getThreadsByDisplayNameQuery, [displayName])).rows;
+        if (user.length === 0) {
+            throw new CustomError("User not found!", "USER NOT FOUND", 404)
+        }
+        return res.status(200).json({
+            status: 200,
+            success: true,
+            result: { ...results }
+        });
+    } catch (error) {
+        if (error instanceof CustomError) {
+            return res.status(error.code).json({
+                status: error.code,
+                succes: false,
+                error: {
+                    name: error.name,
+                    message: error.message,
+                }
+            });
+        } else {
+            console.error(error);
+            return res.status(500).json({
+                status: 500,
+                succes: false,
+                error: {
+                    name: error.name,
+                    message: error.message,
+                }
+
+
+            });
+        }
+    }
+})
+
+
+const getUserComments = expressAsyncHandler(async (req, res) => {
+    const { displayName } = req.params;
+    try {
+        const user = (await poolQuery(getUserByDisplayNameQuery, [displayName])).rows;
+        const results = (await poolQuery(getCommentsByDisplayNameQuery, [displayName])).rows;
+        if (user.length === 0) {
+            throw new CustomError("User not found!", "USER NOT FOUND", 404)
+        }
+        return res.status(200).json({
+            status: 200,
+            success: true,
+            result: { ...results }
+        });
+    } catch (error) {
+        if (error instanceof CustomError) {
+            return res.status(error.code).json({
+                status: error.code,
+                succes: false,
+                error: {
+                    name: error.name,
+                    message: error.message,
+                }
+            });
+        } else {
+            console.error(error);
+            return res.status(500).json({
+                status: 500,
+                succes: false,
+                error: {
+                    name: error.name,
+                    message: error.message,
+                }
+
+
+            });
+        }
+    }
+})
 module.exports = {
     registerUser,
     loginUser,
     getUserByDisplayName,
-    /*
     getUserPosts,
     getUserComments,
-    */
+
 }
