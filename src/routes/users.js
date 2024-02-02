@@ -3,21 +3,20 @@ const usersRouter = express.Router();
 const {
     registerUser,
     loginUser,
+    getUserByDisplayName,
     /*
-    getUserById,
-    
     getUserPosts,
     getUserComments,
     */
 } = require('../services/users');
 
+
 usersRouter.post(`/registerUser`, registerUser);
 usersRouter.post(`/login`, loginUser);
-
+usersRouter.get('/user/:displayName', getUserByDisplayName);
 /*
-usersRouter.get('/user/:user_id', getUserById);
-usersRouter.get(`/user/:user_id/posts`, getUserPosts);
-usersRouter.get(`/user/:user_id/comments`, getUserComments);
+usersRouter.get(`/user/:username/posts`, getUserPosts);
+usersRouter.get(`/user/:username/comments`, getUserComments);
 */
 
 

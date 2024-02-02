@@ -10,9 +10,11 @@ const {
     registerUserQuery,
     checkEmailExistsQuery,
     checkUsernameExistsQuery,
-    getUserByUsernameQuery,
+    getUserByDisplayNameQuery,
     displayNameTakenQuery,
     logInQuery,
+    getThreadsByDisplayNameQuery,
+    getCommentsByDisplayNameQuery,
 } = require('../database/queries/users');
 
 
@@ -137,14 +139,55 @@ const loginUser = expressAsyncHandler(async (req, res) => {
             });
         }
     }
-})
+});
+
+const getUserByDisplayName = expressAsyncHandler(async (req, res) => {
+    const { displayName } = req.params;
+    try {
+        let promiseArr = [];
+        const user = poolQuery(getUserByDisplayNameQuery, [displayName])
+        const posts = poolQuery(getThreadsByDisplayNameQuery, [displayName])
+        const comments = poolQuery(getCommentsByDisplayNameQuery, [displayName])
+        promiseArr.push(user, posts, comments);
+        const [userResult, postsResult, commentsResult] = await Promise.all(promiseArr);
+        return res.status(200).json({
+            status: 200,
+            success: true,
+            result: {
+                user_data: { ...userResult.rows[0] },
+                posts: { ...postsResult.rows },
+                comments: { ...commentsResult.rows },
+            }
+        });
+    } catch (error) {
+        if (error instanceof CustomError) {
+            return res.status(error.code).json({
+                status: error.code,
+                succes: false,
+                error: {
+                    name: error.name,
+                    message: error.message,
+                }
+            });
+        } else {
+            console.error(error);
+            return res.status(500).json({
+                status: 500,
+                succes: false,
+                error: {
+                    name: error.name,
+                    message: error.message,
+                }
+            });
+        }
+    }
+});
 
 module.exports = {
     registerUser,
     loginUser,
+    getUserByDisplayName,
     /*
-    getUserById,
-    
     getUserPosts,
     getUserComments,
     */
