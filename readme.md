@@ -15,6 +15,8 @@ Uses Postgresql database.
 
 ## **Note: All endpoints have the prefix `/api`**
 
+### **! Check the given Postman collection for examples and required request bodies**
+
 ### 2.1. Threads and comments
 
 | HTTP Method | Endpoint                                    | Description                                     |
@@ -31,4 +33,10 @@ Uses Postgresql database.
 
 ### 2.2. Users
 
-#### TBA
+| HTTP Method | Endpoint                      | Description                                             |
+| :---------: | :---------------------------- | :------------------------------------------------------ |
+|    POST     | /registerUser                 | Register a new user, returns a JWT                      |
+|    POST     | /login                        | Attempt to log in, returns a JWT on success             |
+|     GET     | /user/`:displayName`          | Get user by Display Name, Includes threads and comments |
+|     GET     | /user/`:displayName`/threads  | Get threads belonging to `:displayName`                 |
+|     GET     | /user/`:displayName`/comments | Get comments belonging to `:displayName`                |
