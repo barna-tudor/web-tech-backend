@@ -23,8 +23,8 @@ const checkJWT = require('./routes/auth');
 // example:
 // app.use(./api', checkJWT, router);
 
-app.use('/api', threadsRouter);
-app.use('/api', topicsRouter);
+app.use('/api', checkJWT, threadsRouter);
+app.use('/api', checkJWT, topicsRouter);
 app.use('/api', usersRouter);
 
 app.listen(PORT, () => {

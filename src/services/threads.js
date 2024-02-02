@@ -24,10 +24,10 @@ const {
  * const {user_id} = req.body;
  */
 const createNewThread = expressAsyncHandler(async (req, res) => {
+    const user_id = req.user.user_id;
     const {
         thread_title,
         thread_body,
-        user_id,
     } = req.body;
     try {
         const result = await poolQuery(insertNewThreadQuery, [thread_title, thread_body, user_id]);
@@ -49,8 +49,9 @@ const createNewThread = expressAsyncHandler(async (req, res) => {
 })
 
 const createNewComment = expressAsyncHandler(async (req, res) => {
+    const user_id = req.user.user_id;
     const { thread_id } = req.params;
-    const { comment_body, user_id } = req.body;
+    const { comment_body } = req.body;
     try {
         const result = await poolQuery(insertNewCommentQuery, [comment_body, user_id, thread_id]);
         return res.status(201).json({
@@ -71,9 +72,9 @@ const createNewComment = expressAsyncHandler(async (req, res) => {
 })
 
 const createNewReply = expressAsyncHandler(async (req, res) => {
+    const user_id = req.user.user_id;
     const { thread_id, comment_id } = req.params;
-    const { } = req.query;
-    const { user_id, comment_body } = req.body;
+    const { comment_body } = req.body;
     try {
         const reply = (await poolQuery(insertNewReplyQuery, [comment_body, user_id, thread_id, comment_id]));
         return res.status(201).json({
@@ -159,8 +160,9 @@ const getAllThreadsByTopic = expressAsyncHandler(async (req, res) => {
 })
 
 const addVoteToThread = expressAsyncHandler(async (req, res) => {
+    const user_id = req.user.user_id;
     const { thread_id } = req.params;
-    const { user_id, vote } = req.body;
+    const { vote } = req.body;
     try {
         // sequential is fine for now
         await poolQuery(deletePreviousThreadVoteQuery, [user_id, thread_id]);
@@ -183,8 +185,9 @@ const addVoteToThread = expressAsyncHandler(async (req, res) => {
 })
 
 const addVoteToComment = expressAsyncHandler(async (req, res) => {
+    const user_id = req.user.user_id;
     const { comment_id } = req.params;
-    const { user_id, vote } = req.body;
+    const { vote } = req.body;
     try {
         // sequential is fine for now
         await poolQuery(deletePreviousCommentVoteQuery, [user_id, comment_id]);
