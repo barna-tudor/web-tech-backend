@@ -1,6 +1,7 @@
 const express = require('express');
 const threadsRouter = express.Router();
-const { createNewThread,
+const {
+    createNewThread,
     createNewComment,
     getThreadById,
     getThreadComments,
