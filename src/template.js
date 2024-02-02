@@ -11,13 +11,27 @@ const name = expressAsyncHandler(async (req, res) => {
             result: {}
         });
     } catch (error) {
-        return res.status(500).json({
-            status: 500,
-            succes: false,
-            error: {
-                name: error.name,
-                message: error.message,
-            }
-        })
+        if (error instanceof CustomError) {
+            return res.status(error.code).json({
+                status: error.code,
+                succes: false,
+                error: {
+                    name: error.name,
+                    message: error.message,
+                }
+            });
+        } else {
+            console.error(error);
+            return res.status(500).json({
+                status: 500,
+                succes: false,
+                error: {
+                    name: error.name,
+                    message: error.message,
+                }
+
+
+            });
+        }
     }
 })
