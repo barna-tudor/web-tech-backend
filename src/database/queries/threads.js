@@ -57,7 +57,7 @@ const getRepliesInThreadQuery =
 
 const getThreadsByTopicQuery =
     `SELECT thread_id, thread_title, thread_body, created_time, SUM(tv.vote) as vote_total
-    FROM threads t
+    FROM thread t
     LEFT JOIN thread_vote tv ON t.thread_id = tv.thread_id
     WHERE topic_id = $1
     GROUP BY t.thread_id`;

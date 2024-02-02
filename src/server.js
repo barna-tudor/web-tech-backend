@@ -18,11 +18,6 @@ const threadsRouter = require('./routes/threads');
 const topicsRouter = require('./routes/topics');
 const usersRouter = require('./routes/users');
 
-// UNUSED
-const checkJWT = require('./routes/auth');
-// example:
-// app.use(./api', checkJWT, router);
-
 app.use('/api', threadsRouter);
 app.use('/api', topicsRouter);
 app.use('/api', usersRouter);

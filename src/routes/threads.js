@@ -1,6 +1,7 @@
 const express = require('express');
 const threadsRouter = express.Router();
-const { createNewThread,
+const {
+    createNewThread,
     createNewComment,
     getThreadById,
     getThreadComments,
@@ -11,14 +12,15 @@ const { createNewThread,
     getCommentById,
 }
     = require('../services/threads');
+const checkJWT = require('./auth');
 
-threadsRouter.post('/newThread', createNewThread);
-threadsRouter.post('/thread/:thread_id/newComment', createNewComment);
+threadsRouter.post('/newThread', checkJWT, createNewThread);
+threadsRouter.post('/thread/:thread_id/newComment', checkJWT, createNewComment);
 threadsRouter.get('/thread/:thread_id', getThreadById);
 threadsRouter.get('/thread/:thread_id/comments', getThreadComments);
-threadsRouter.post('/thread/:thread_id/:comment_id/newReply', createNewReply);
-threadsRouter.post('/thread/:thread_id/vote', addVoteToThread);
-threadsRouter.post('/thread/:thread_id/:comment_id/vote', addVoteToComment);
+threadsRouter.post('/thread/:thread_id/:comment_id/newReply', checkJWT, createNewReply);
+threadsRouter.post('/thread/:thread_id/vote', checkJWT, addVoteToThread);
+threadsRouter.post('/thread/:thread_id/:comment_id/vote', checkJWT, addVoteToComment);
 threadsRouter.get('/topic/:topic_id/threads', getAllThreadsByTopic);
 threadsRouter.get('/comment/:comment_id', getCommentById);
 
