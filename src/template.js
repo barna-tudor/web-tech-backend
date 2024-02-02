@@ -10,7 +10,7 @@ const name = expressAsyncHandler(async (req, res) => {
             success: true,
             result: {}
         });
-    } catch (e) {
+    } catch (error) {
         return res.status(500).json({
             status: 500,
             succes: false,

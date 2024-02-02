@@ -1,18 +1,14 @@
 const registerUserQuery =
     `INSERT INTO "user"(username, display_name, email, password)
-    VALUES($1,$2,$3,$4)`;
+    VALUES($1,$2,$3,$4)
+    RETURNING (user_id)`;
 
-const checkUsernameExists =
+const checkUsernameExistsQuery =
     `SELECT COUNT(*)
     FROM "user"
     WHERE username = $1`;
 
-const getUserByLoginInfoQuery =
-    `SELECT user_id, display_name, join_date
-    FROM "user"
-    WHERE (email = $1 AND password = $2) OR (username = $1 AND password = $2)`;
-
-const checkEmailQuery =
+const checkEmailExistsQuery =
     `SELECT COUNT(*)
     FROM "user"
     WHERE email = $1`;
@@ -22,11 +18,16 @@ const getUserByUsernameQuery =
     FROM "user"
     WHERE username = $1`;
 
+const displayNameTakenQuery =
+    `SELECT COUNT(*)
+    FROM "user"
+    WHERE display_name = $1`;
+
 
 module.exports = {
     registerUserQuery,
-    checkEmailQuery,
-    checkUsernameExists,
-    getUserByLoginInfoQuery,
+    checkEmailExistsQuery,
+    checkUsernameExistsQuery,
     getUserByUsernameQuery,
+    displayNameTakenQuery,
 }
