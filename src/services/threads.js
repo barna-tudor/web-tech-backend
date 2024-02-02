@@ -28,7 +28,7 @@ const name = expressAsyncHandler(async (req, res) => {
             success: true,
             result: {}
         });
-    } catch (e) {
+    } catch (error) {
         return res.status(500).json({
             status: 500,
             succes: false,
@@ -81,7 +81,7 @@ const createNewComment = expressAsyncHandler(async (req, res) => {
             success: true,
             result: { comment_id: result.rows[0].comment_id, },
         });
-    } catch (e) {
+    } catch (error) {
         return res.status(500).json({
             status: 500,
             succes: false,
@@ -104,7 +104,7 @@ const createNewReply = expressAsyncHandler(async (req, res) => {
             success: true,
             result: { comment_id: reply.rows[0].comment_id, }
         });
-    } catch (e) {
+    } catch (error) {
         return res.status(500).json({
             status: 500,
             succes: false,
@@ -125,7 +125,7 @@ const getThreadById = expressAsyncHandler(async (req, res) => {
             success: true,
             result: { ...thread, }
         });
-    } catch (e) {
+    } catch (error) {
         return res.status(500).json({
             status: 500,
             succes: false,
@@ -148,7 +148,7 @@ const getThreadComments = expressAsyncHandler(async (req, res) => {
                 ...threadComments,
             }
         });
-    } catch (e) {
+    } catch (error) {
         return res.status(500).json({
             status: 500,
             succes: false,
@@ -169,7 +169,7 @@ const getAllThreadsByTopic = expressAsyncHandler(async (req, res) => {
             success: true,
             result: { ...threads, }
         });
-    } catch (e) {
+    } catch (error) {
         return res.status(500).json({
             status: 500,
             succes: false,
@@ -193,7 +193,7 @@ const addVoteToThread = expressAsyncHandler(async (req, res) => {
             success: true,
             result: {}
         });
-    } catch (e) {
+    } catch (error) {
         return res.status(500).json({
             status: 500,
             succes: false,
@@ -217,7 +217,7 @@ const addVoteToComment = expressAsyncHandler(async (req, res) => {
             success: true,
             result: {}
         });
-    } catch (e) {
+    } catch (error) {
         return res.status(500).json({
             status: 500,
             succes: false,
@@ -238,7 +238,7 @@ const getCommentById = expressAsyncHandler(async (req, res) => {
             success: true,
             result: { ...comment, },
         });
-    } catch (e) {
+    } catch (error) {
         return res.status(500).json({
             status: 500,
             succes: false,
