@@ -18,6 +18,11 @@ const getUserByUsernameQuery =
     FROM "user"
     WHERE username = $1`;
 
+const logInQuery =
+    `SELECT * from "user"
+    WHERE email = $1 or username = $2`;
+
+
 const displayNameTakenQuery =
     `SELECT COUNT(*)
     FROM "user"
@@ -30,4 +35,5 @@ module.exports = {
     checkUsernameExistsQuery,
     getUserByUsernameQuery,
     displayNameTakenQuery,
+    logInQuery,
 }

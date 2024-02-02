@@ -11,7 +11,8 @@ const {
     checkEmailExistsQuery,
     checkUsernameExistsQuery,
     getUserByUsernameQuery,
-    displayNameTakenQuery
+    displayNameTakenQuery,
+    logInQuery,
 } = require('../database/queries/users');
 
 
@@ -87,11 +88,49 @@ const registerUser = expressAsyncHandler(async (req, res) => {
     }
 })
 
+const loginUser = expressAsyncHandler(async (req, res) => {
+    const {
+        email,
+        username,
+        password,
+    } = req.body;
+    try {
+
+        const checkDatabase = (await poolQuery(logInQuery, [email, username])).rows;
+
+        if (checkDatabase.length === 0) throw new CustomError("User not found!", "USER NOT FOUND", 400);
+
+        const match = await bcrypt.compare(password, checkDatabase[0].password);
+        if (!match) {
+            throw new CustomError("Password is incorrect!", "PASSWORD MISMATCH", 400);
+        } else {
+            const token = jwt.sign({ user_id: checkDatabase[0].user_id }, process.env.JWT_SECRET, { expiresIn: "30m" });
+            return res.status(200).json({
+                status: 200,
+                success: true,
+                result: {
+                    token: token,
+                }
+            });
+        }
+    } catch (error) {
+        return res.status(500).json({
+            status: 500,
+            succes: false,
+            error: {
+                name: error.name,
+                message: error.message,
+            }
+        })
+    }
+})
+
 module.exports = {
     registerUser,
+    loginUser,
     /*
     getUserById,
-    loginUser,
+    
     getUserPosts,
     getUserComments,
     */
