@@ -21,6 +21,7 @@ async function checkJWT(req, res, next) {
                 req.user = user;
                 next();
             } else {
+                console.log(err);
                 return res.sendStatus(403);
             }
         } else {

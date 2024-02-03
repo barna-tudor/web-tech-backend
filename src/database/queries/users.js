@@ -29,7 +29,7 @@ const displayNameTakenQuery =
     WHERE display_name = $1`;
 
 const getThreadsByDisplayNameQuery =
-    `SELECT t.*, SUM(tv.vote) as vote_total
+    `SELECT t.*, CAST(COALESCE(SUM(tv.vote),0) as INTEGER) as vote_total
     FROM thread t
     LEFT JOIN thread_vote tv ON t.thread_id = tv.thread_id
     LEFT JOIN "user" u ON t.user_id = u.user_id
@@ -39,7 +39,7 @@ const getThreadsByDisplayNameQuery =
 
 
 const getCommentsByDisplayNameQuery =
-    `SELECT c.*, SUM(cv.vote) as vote_total
+    `SELECT c.*, CAST(COALESCE(SUM(cv.vote),0) as INTEGER) as vote_total
     FROM comment c
     LEFT JOIN comment_vote cv ON c.comment_id = cv.comment_id
     LEFT JOIN "user" u ON c.user_id = u.user_id
