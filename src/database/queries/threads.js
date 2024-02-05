@@ -31,7 +31,7 @@ const deletePreviousThreadVoteQuery =
 
 
 const getThreadByIDQuery =
-    `SELECT t.*, CAST(COALESCE(SUM(tv.vote),0) as INTEGER) as vote_total
+    `SELECT t.*, CAST(COALESCE(SUM(tv.vote),0) as INTEGER) as vote_total, (SELECT tv.vote FROM thread_vote tv WHERE tv.user_id=$2) as user_vote 
     FROM thread t
     LEFT JOIN thread_vote tv ON t.thread_id = tv.thread_id
     WHERE t.thread_id = $1
@@ -39,7 +39,7 @@ const getThreadByIDQuery =
 
 // No pagination for now
 const getCommentsByThreadIDQuery =
-    `SELECT c.*, CAST(COALESCE(SUM(cv.vote),0) as INTEGER) as vote_total
+    `SELECT c.*, CAST(COALESCE(SUM(cv.vote),0) as INTEGER) as vote_total, (SELECT cv.vote FROM comment_vote cv WHERE cv.user_id=$2) as user_vote
     FROM "comment" c
     LEFT JOIN comment_vote cv ON c.comment_id = cv.comment_id
     WHERE c.thread_id = $1
@@ -48,7 +48,7 @@ const getCommentsByThreadIDQuery =
 
 // unused
 const getRepliesInThreadQuery =
-    `SELECT c.*, CAST(COALESCE(SUM(cv.vote),0) as INTEGER) as vote_total
+    `SELECT c.*, CAST(COALESCE(SUM(cv.vote),0) as INTEGER) as vote_total, (SELECT cv.vote FROM comment_vote cv WHERE cv.user_id=$2) as user_vote
     FROM "comment" c
     LEFT JOIN comment_vote cv ON c.comment_id = cv.comment_id
     WHERE thread_id = $1 AND is_reply = TRUE
@@ -56,14 +56,14 @@ const getRepliesInThreadQuery =
     ORDER BY c.comment_id`;
 
 const getThreadsByTopicQuery =
-    `SELECT thread_id, thread_title, thread_body, created_time, CAST(COALESCE(SUM(tv.vote),0) as INTEGER) as vote_total
+    `SELECT thread_id, thread_title, thread_body, created_time, CAST(COALESCE(SUM(tv.vote),0) as INTEGER) as vote_total, (SELECT tv.vote FROM thread_vote tv WHERE tv.user_id=$2) as user_vote
     FROM thread t
     LEFT JOIN thread_vote tv ON t.thread_id = tv.thread_id
     WHERE topic_id = $1
     GROUP BY t.thread_id`;
 
 const getCommentByIdQuery =
-    `SELECT c.*, CAST(COALESCE(SUM(cv.vote),0) as INTEGER) as vote_total
+    `SELECT c.*, CAST(COALESCE(SUM(cv.vote),0) as INTEGER) as vote_total, (SELECT cv.vote FROM comment_vote cv WHERE cv.user_id=$2) as user_vote
     FROM "comment" c
     LEFT JOIN comment_vote cv ON c.comment_id = cv.comment_id
     WHERE c.comment_id = $1

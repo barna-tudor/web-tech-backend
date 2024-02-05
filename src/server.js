@@ -21,7 +21,9 @@ const usersRouter = require('./routes/users');
 app.use('/api', threadsRouter);
 app.use('/api', topicsRouter);
 app.use('/api', usersRouter);
-
+//TODO: forgot_pass, send mail, 
+//~~TODO: send "is_voted" on thread/comment if JWT user_id cast a vote~~
+//TODO: register/login w/ google
 app.listen(PORT, () => {
     console.log('Listening on port ', PORT);
 })

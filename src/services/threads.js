@@ -95,9 +95,10 @@ const createNewReply = expressAsyncHandler(async (req, res) => {
 })
 
 const getThreadById = expressAsyncHandler(async (req, res) => {
+    const user_id = req.user.user_id;
     const { thread_id } = req.params;
     try {
-        const thread = (await poolQuery(getThreadByIDQuery, [thread_id])).rows[0];
+        const thread = (await poolQuery(getThreadByIDQuery, [thread_id, user_id])).rows[0];
         return res.status(200).json({
             status: 200,
             success: true,
@@ -116,9 +117,10 @@ const getThreadById = expressAsyncHandler(async (req, res) => {
 })
 
 const getThreadComments = expressAsyncHandler(async (req, res) => {
+    const user_id = req.user.user_id;
     const { thread_id } = req.params;
     try {
-        const threadComments = (await poolQuery(getCommentsByThreadIDQuery, [thread_id])).rows;
+        const threadComments = (await poolQuery(getCommentsByThreadIDQuery, [thread_id, user_id])).rows;
         return res.status(200).json({
             status: 200,
             success: true,
@@ -210,9 +212,10 @@ const addVoteToComment = expressAsyncHandler(async (req, res) => {
 })
 
 const getCommentById = expressAsyncHandler(async (req, res) => {
+    const user_id = req.user.user_id;
     const { comment_id } = req.params;
     try {
-        const comment = (await poolQuery(getCommentByIdQuery, [comment_id])).rows[0]
+        const comment = (await poolQuery(getCommentByIdQuery, [comment_id, user_id])).rows[0]
         return res.status(200).json({
             status: 200,
             success: true,

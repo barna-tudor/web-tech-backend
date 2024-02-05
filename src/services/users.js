@@ -142,12 +142,13 @@ const loginUser = expressAsyncHandler(async (req, res) => {
 });
 
 const getUserByDisplayName = expressAsyncHandler(async (req, res) => {
+    const user_id = req.user.user_id;
     const { displayName } = req.params;
     try {
         let promiseArr = [];
         const user = poolQuery(getUserByDisplayNameQuery, [displayName])
-        const posts = poolQuery(getThreadsByDisplayNameQuery, [displayName])
-        const comments = poolQuery(getCommentsByDisplayNameQuery, [displayName])
+        const posts = poolQuery(getThreadsByDisplayNameQuery, [displayName, user_id])
+        const comments = poolQuery(getCommentsByDisplayNameQuery, [displayName, user_id])
         promiseArr.push(user, posts, comments);
         const [userResult, postsResult, commentsResult] = await Promise.all(promiseArr);
         if (userResult.rows.length === 0) { throw new CustomError("User not found!", "USER NOT FOUND", 404) }
@@ -185,10 +186,11 @@ const getUserByDisplayName = expressAsyncHandler(async (req, res) => {
 });
 
 const getUserPosts = expressAsyncHandler(async (req, res) => {
+    const user_id = req.user.user_id;
     const { displayName } = req.params;
     try {
         const user = (await poolQuery(getUserByDisplayNameQuery, [displayName])).rows;
-        const results = (await poolQuery(getThreadsByDisplayNameQuery, [displayName])).rows;
+        const results = (await poolQuery(getThreadsByDisplayNameQuery, [displayName, user_id])).rows;
         if (user.length === 0) {
             throw new CustomError("User not found!", "USER NOT FOUND", 404)
         }
@@ -225,10 +227,11 @@ const getUserPosts = expressAsyncHandler(async (req, res) => {
 
 
 const getUserComments = expressAsyncHandler(async (req, res) => {
+    const user_id = req.user.user_id;
     const { displayName } = req.params;
     try {
         const user = (await poolQuery(getUserByDisplayNameQuery, [displayName])).rows;
-        const results = (await poolQuery(getCommentsByDisplayNameQuery, [displayName])).rows;
+        const results = (await poolQuery(getCommentsByDisplayNameQuery, [displayName, user_id])).rows;
         if (user.length === 0) {
             throw new CustomError("User not found!", "USER NOT FOUND", 404)
         }

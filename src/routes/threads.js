@@ -16,12 +16,12 @@ const checkJWT = require('./auth');
 
 threadsRouter.post('/newThread', checkJWT, createNewThread);
 threadsRouter.post('/thread/:thread_id/newComment', checkJWT, createNewComment);
-threadsRouter.get('/thread/:thread_id', getThreadById);
-threadsRouter.get('/thread/:thread_id/comments', getThreadComments);
+threadsRouter.get('/thread/:thread_id', checkJWT, getThreadById);
+threadsRouter.get('/thread/:thread_id/comments', checkJWT, getThreadComments);
 threadsRouter.post('/thread/:thread_id/:comment_id/newReply', checkJWT, createNewReply);
 threadsRouter.post('/thread/:thread_id/vote', checkJWT, addVoteToThread);
 threadsRouter.post('/thread/:thread_id/:comment_id/vote', checkJWT, addVoteToComment);
-threadsRouter.get('/topic/:topic_id/threads', getAllThreadsByTopic);
-threadsRouter.get('/comment/:comment_id', getCommentById);
+threadsRouter.get('/topic/:topic_id/threads', checkJWT, getAllThreadsByTopic);
+threadsRouter.get('/comment/:comment_id', checkJWT, getCommentById);
 
 module.exports = threadsRouter;
